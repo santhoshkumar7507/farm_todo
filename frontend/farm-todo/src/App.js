@@ -7,15 +7,19 @@ import ToDoList from "./ToDoList";
 function App() {
   const [listSummaries, setListSummaries] = useState(null);
   const [seletedItem, setSelectedItem] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() =>{
-    reloadData().catch(console.error);
+    reloadData().catch(err => {
+      console.error(err);
+      setError("Failed to load to-do lists. Check your backend connection.");
+    });
   },[]);
 
   async function reloadData(){
+    setError(null);
     const response = await axios.get("/api/lists");
-    const data = await response.data;
-    setListSummaries(data);
+    setListSummaries(response.data);
   }
 
   function handleNewToDoList(nameName){
@@ -48,18 +52,40 @@ function App() {
     reloadData().catch(console.error);
   }
 
+  if (error) {
+    return (
+      <div className="App">
+        <div className="error-message">
+           <h2>Connectivity Issue</h2>
+           <p>{error}</p>
+           <button onClick={() => reloadData()}>Retry Connection</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (listSummaries === null) {
+    return (
+      <div className="App">
+        <div className="loading">
+          <div className="spinner"></div>
+          <p>Connecting to your personal task board...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (seletedItem === null) {
     return (
       <div className="App">
         <ListToDoLists
           listSummaries={listSummaries}
-          handleSelectList={handleNewToDoList}
-          handleNewToDoList={handleDeleteToDoList}
-          handleDeleteToDoList={handleSelectList}
+          handleSelectList={handleSelectList}
+          handleNewToDoList={handleNewToDoList}
+          handleDeleteToDoList={handleDeleteToDoList}
         />
       </div>
     );
-
   } else {
     return (
       <div className="App">

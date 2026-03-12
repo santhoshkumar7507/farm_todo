@@ -1,13 +1,66 @@
-.ListToDoLists .summary{
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-    cursor: pointer;
-    display: flex;
+.ListToDoLists {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.ListToDoLists .count{
-    padding-left:1ex;
-    color: blueviolet;
-    font-size: 92%;
+.summary {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.summary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.01);
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.count {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+.flex {
+  flex: 1;
+}
+
+.trash {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #ef4444;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.trash:hover {
+  background: rgba(239, 68, 68, 0.1);
+  opacity: 1;
+  transform: rotate(5deg);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #94a3b8;
+  font-style: italic;
 }

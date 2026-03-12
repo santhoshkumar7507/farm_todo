@@ -1,6 +1,6 @@
 import "./ListTodoLists.css";
 import { useRef } from "react";
-import { BiSolidTrash } from "react-icons/bi";
+import { BiSolidTrash, BiPlus } from "react-icons/bi";
 
 function ListToDoLists({
     listSummaries,
@@ -10,67 +10,60 @@ function ListToDoLists({
 }) {
     const labelRef = useRef();
 
-    if (listSummaries === null) {
-        return <div className="ListToDoLists loading">Loading to-do lists...</div>;
-    } else if (listSummaries.length === 0) {
-        return(
-            <div className="ListToDoLists">
-                <div className="box">
-                    <label>
-                        New To-Do List: &nbsp;
-                        <input id = {labelRef} type="text" />
-                    </label>
-                    <button
-                     onClick={() =>
-                      handleNewToDoList(document.getElementById(labelRef).value)}>
-                        New
-                    </button>
-                </div>
-                <p>
-                    There are no to-do lists!
-                </p>
-            </div>
-        );
-    }
+    const onNewList = () => {
+        if (labelRef.current && labelRef.current.value.trim()) {
+            handleNewToDoList(labelRef.current.value.trim());
+            labelRef.current.value = "";
+        }
+    };
 
     return (
         <div className="ListToDoLists">
-            <h1>All To-Do Lists</h1>
+            <h1>Farm To-Do Lists</h1>
+            
             <div className="box">
-                <label>
-                    New To-Do List: &nbsp;
-                    <input id = {labelRef} type="text" />
-                </label>
-                <button
-                    onClick={() =>
-                    handleNewToDoList(document.getElementById(labelRef).value)}>
-                    New
+                <input 
+                    ref={labelRef} 
+                    type="text" 
+                    placeholder="Create a new task list..."
+                    onKeyPress={(e) => e.key === 'Enter' && onNewList()}
+                />
+                <button onClick={onNewList}>
+                    <BiPlus size={20} />
+                    Create
                 </button>
             </div>
-            {listSummaries.map((summary)=>{
-                return(
+
+            {listSummaries.length === 0 ? (
+                <div className="empty-state">
+                    <p>Your task boards are currently empty. Start by creating one above!</p>
+                </div>
+            ) : (
+                listSummaries.map((summary) => (
                     <div
-                    key={summary.id}
-                    className="summary"
-                    onClick={() => handleSelectList(summary.id)}
-                            >
-                                <span className="name">{summary.name}</span>
-                                <span className="count">({summary.item_count} items)</span>
-                                <span className="flex"></span>
-                                <span
-                                   className="trash"
-                                   onClick={(evt) => {
-                                    evt.stopPropagation();
+                        key={summary.id}
+                        className="summary"
+                        onClick={() => handleSelectList(summary.id)}
+                    >
+                        <div className="name">{summary.name}</div>
+                        <div className="count">{summary.item_count} tasks</div>
+                        <div className="flex"></div>
+                        <div
+                            className="trash"
+                            onClick={(evt) => {
+                                evt.stopPropagation();
+                                if(window.confirm("Delete this list?")) {
                                     handleDeleteToDoList(summary.id);
-                                   }}
-                                   >
-                                    <BiSolidTrash />
-                                   </span>
-                                   </div>
-                );
-            })}
+                                }
+                            }}
+                        >
+                            <BiSolidTrash size={20} />
+                        </div>
+                    </div>
+                ))
+            )}
         </div>
     );
 }
-export default ListToDoLists;
 
+export default ListToDoLists;
