@@ -1,0 +1,23 @@
+.ToDoList .back {
+    margin: 0 lem;
+    padding: lem;
+    float: left;
+
+}
+
+.ToDoList .item {
+    border: 1px solid #ccc;
+    padding: lem;
+    margin: 1em;
+    cursor: pointer;
+    display: flex;   
+}
+
+.ToDoList .label {
+    margin-left: 1em;
+}
+
+.ToDoList .checked .label {
+    text-decoration: line-through;
+    color: #ccc;
+}
